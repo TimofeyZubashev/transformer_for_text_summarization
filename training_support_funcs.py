@@ -34,6 +34,9 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
 
+tokenizer = AutoTokenizer.from_pretrained('prajjwal1/bert-tiny')
+device = ("cuda" if torch.cuda.is_available() else "cpu")
+
 # Тренировочная функция для одной эпохи
 def train_one_epoch(model, dataloader, optimizer):
     model.train()

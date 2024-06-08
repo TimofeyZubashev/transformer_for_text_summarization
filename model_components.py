@@ -199,7 +199,7 @@ class Decoder(nn.Module):
         self.n_heads = n_heads
         self.attention_head = attention_head_class
         self.n_blocks = n_blocks
-        self.input_encoder = input_encoder_obj
+        self.input_encoder_obj = input_encoder_obj
         
         # Decoder Speical
         self.output_dim = output_dim
@@ -219,12 +219,21 @@ class Decoder(nn.Module):
     
     def forward(self,encoder_output,x_mask):
         
-        x = self.input_encoder.create_summary_seq(encoder_output).to(device)
+        x = self.input_encoder_obj.create_summary_seq(encoder_output).to(device)
         
         for block in self.decoder:
             x = block(x,encoder_output,x_mask)
             
         out = self.ffc(x)
+        return out 
+    
+    def test(self):
+        
+        x = torch.tensor([[101]])
+        encoder_output = torch.rand(size = (1,50,256))
+        mask = torch.randint(low = 0, high = 2, size = (1,50)) 
+        
+        out = self.forward(x,encoder_output,mask)
         return out 
     
     def test(self):
@@ -270,14 +279,12 @@ class Encoder(nn.Module):
         self.n_heads = n_heads
         self.attention_head = attention_head_class
         self.n_blocks = n_blocks
-        
-        self.input_encoder = input_encoder_obj
         self.encoder = nn.ModuleList([Encoder_Block(hidden_dim, n_heads,attention_head_class,n_blocks) for block in range(n_blocks)])
-        
+        self.input_encoder_obj = input_encoder_obj
         
     def forward(self,x,x_mask):
         
-        x = self.input_encoder(x)
+        x = self.input_encoder_obj(x).to(device)
         
         for block in self.encoder:
             x = block(x,x_mask)

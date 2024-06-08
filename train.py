@@ -51,20 +51,24 @@ print("="*100)
 
 # Create tokenizer
 tokenizer = AutoTokenizer.from_pretrained('prajjwal1/bert-tiny')
-print(f"Vocab size = {tokenizer.vocab_size}")
+print(f"Tokeizer vocab size = {tokenizer.vocab_size} tokens")
 
 #-----------------------------------------------------------------------
 
 # Params
 vocab_size = tokenizer.vocab_size
-hidden_dim = 512
+hidden_dim = 256
 n_blocks = 6
 n_heads = 8
 pad_idx = 0
 max_length = 1500
-
+max_seq_length = 250
 device = ("cuda" if torch.cuda.is_available() else "cpu")
-model = TTransformer(Attention,vocab_size,hidden_dim,n_blocks,n_heads,pad_idx,device,max_length)
+
+# Create input_encoder_obj  to store nn.Embedding table, which is used to convert tokens to vectors
+input_encoder_obj = Input_Encoder(vocab_size,hidden_dim,pad_idx,max_length,max_seq_length)
+
+model = TTransformer(Attention,vocab_size,hidden_dim,n_blocks,n_heads,pad_idx,device,max_length,max_seq_length,input_encoder_obj)
 model = model.to(device)
 
 # Read data
@@ -94,7 +98,7 @@ input_encoder_obj = Input_Encoder(vocab_size,hidden_dim,pad_idx,max_length,max_s
 device = ("cuda" if torch.cuda.is_available() else "cpu")
 
 # Create model and transfer to device
-model = TTransformer(Attention,vocab_size,hidden_dim,n_blocks,n_heads,pad_idx,device,max_length,max_seq_length)
+model = TTransformer(Attention,vocab_size,hidden_dim,n_blocks,n_heads,pad_idx,device,max_length,max_seq_length,input_encoder_obj)
 model = model.to(device)
 
 # Create optimizer and scheduler
@@ -122,4 +126,4 @@ for epoch in range(num_epochs):
     print(f'Epoch {epoch+1}/{num_epochs}, Train Loss: {average_loss_train:.4f},Test Loss: {average_loss_test:.4f}')
 
     # Сохранение модели после каждой эпохи (можно добавить условие, чтобы сохранять только при улучшении)
-    torch.save(model.state_dict(), f'model_epoch_{epoch+1}.pt')
+    torch.save(model.state_dict(), f'folder2store_model_versions/model_epoch_{epoch+1}.pt')

@@ -38,6 +38,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
 
+tokenizer = AutoTokenizer.from_pretrained('prajjwal1/bert-tiny')
 
 class CustomDatasetV2(Dataset):
     def __init__(self, data: pd.DataFrame):
