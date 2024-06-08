@@ -10,10 +10,7 @@ import pickle
 import re
 
 # Transformers
-
-import transformers
 from transformers import AutoTokenizer, AutoModel
-from transformers import GPT2Tokenizer
 
 # Model creation 
 import torch
@@ -39,8 +36,7 @@ import matplotlib.pyplot as plt
 from IPython.display import clear_output
 
 # Importing model
-from model_components import Attention,MultiHeadAttention_v2,FeedForward,Decoder_Block,Decoder,Encoder_Block,Encoder,Input_Encoder
-from model import TTransformer
+from model import model
 from dataset_n_dataloader import CustomDatasetV2, custom_collate_fn
 from training_support_funcs import train_one_epoch,validation_one_epoch,plot_stats
 
@@ -53,27 +49,12 @@ print("="*100)
 tokenizer = AutoTokenizer.from_pretrained('prajjwal1/bert-tiny')
 print(f"Tokeizer vocab size = {tokenizer.vocab_size} tokens")
 
-#-----------------------------------------------------------------------
-
-# Params
-vocab_size = tokenizer.vocab_size
-hidden_dim = 256
-n_blocks = 6
-n_heads = 8
-pad_idx = 0
-max_length = 1500
-max_seq_length = 250
-device = ("cuda" if torch.cuda.is_available() else "cpu")
-
-# Create input_encoder_obj  to store nn.Embedding table, which is used to convert tokens to vectors
-input_encoder_obj = Input_Encoder(vocab_size,hidden_dim,pad_idx,max_length,max_seq_length)
-
-model = TTransformer(Attention,vocab_size,hidden_dim,n_blocks,n_heads,pad_idx,device,max_length,max_seq_length,input_encoder_obj)
-model = model.to(device)
 
 # Read data
 train_df = pd.read_csv("datasets/train_data_short.csv")
+train_df = train_df.iloc[:15]
 test_df = pd.read_csv("datasets/test_data_short.csv")
+test_df = test_df.iloc[:15]
 
 # Create Dataset
 train_dataset = CustomDatasetV2(train_df)
@@ -83,30 +64,12 @@ test_dataset = CustomDatasetV2(test_df)
 train_dataloader = DataLoader(dataset = train_dataset,batch_size = 15, num_workers = 0, shuffle = True, pin_memory = True, collate_fn = custom_collate_fn)
 test_dataloader = DataLoader(dataset = test_dataset,batch_size = 15, num_workers = 0, shuffle = True,pin_memory = True, collate_fn = custom_collate_fn)
 
-# Specify params
-vocab_size = tokenizer.vocab_size
-hidden_dim = 256
-n_blocks = 6
-n_heads = 8
-pad_idx = 0
-max_length = 1500
-max_seq_length = 250
-
-# Create input_encoder_obj to use
-# Inpute Encoder is used to encode encoder & decoder tokens to vectors. It is stored on CPU for efficient memory utilization
-input_encoder_obj = Input_Encoder(vocab_size,hidden_dim,pad_idx,max_length,max_seq_length)
-device = ("cuda" if torch.cuda.is_available() else "cpu")
-
-# Create model and transfer to device
-model = TTransformer(Attention,vocab_size,hidden_dim,n_blocks,n_heads,pad_idx,device,max_length,max_seq_length,input_encoder_obj)
-model = model.to(device)
-
 # Create optimizer and scheduler
 optimizer = Adam(model.parameters(), lr = 1e-4)
 scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=10, verbose=True)
 
 # TRAINING ZONE
-num_epochs = 20
+num_epochs = 1
 
 # Основной цикл обучения
 train_loss_per_epoch = []
