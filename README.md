@@ -1,25 +1,23 @@
 ![telegram-cloud-photo-size-2-5418380851026191361-y](https://github.com/TimofeyZubashev/transformer_for_text_summarization/assets/120308225/f4dcacac-d0d2-4f49-b7a7-6dfbf0fc8cfd)
 
-# Vanila Transformer Architecture for text summarization
+# Vanilla Transformer Architecture for Text Summarization
 
-In this folder I have realised transformer summarizer using vanila transformer achitecture.
+This repository features a text summarizer implemented using the vanilla transformer architecture.
 
-This repository can be helpful for thouse who:
+## Who Might Find This Useful
 
-1) Learning transformers and wants so see raw transformer architecture realsiation
+1. **Learners**: Those who are learning about transformers and want to see a raw implementation of the transformer architecture.
+2. **Experimenters**: Individuals looking to experiment with text summarization by modifying the existing model.
 
-2) Wants to experiment with text summariztion by adding editing existing model
+## How to Use This Repository
 
-# How to use rep
+1. **Datasets**: The repository includes CNN news articles and their summaries (short versions). If you need longer versions, please download them from Kaggle.
+2. **Training**: Run `train.py` to train the model. The model weights will be saved in the "folder2store_model_versions" directory.
+3. **Testing**: Run `test_model_performance.py` to print the results in the terminal.
 
-1) Datasets include CNN news and their summaries, but short version, download on Kaggle if needed longer
+## How to Experiment
 
-2) Run train.py -> train model and store model weights in "folder2store_model_versions"
+1. **Try Different Datasets**: Experiment with different datasets to see how the model performs.
+2. **Modify the Loss Function**: The current implementation uses a combination of CrossEntropy and ROUGE loss (which measures the similarity of token embeddings). Experiment with different loss functions to improve performance.
 
-3) Run test_model_performance.py to see results printed in terminal
-
-# How to experiment
-
-1) I suggest you try different datasets
-
-2) I suggest you experiment with loss function (I am using combination of CrossEntropy + ROGUE loss (which measues vector simmilarities of alike token embedding))
+Feel free to explore, modify, and enhance the model as you see fit!
