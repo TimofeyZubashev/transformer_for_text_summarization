@@ -1,4 +1,4 @@
-![Uploading image.png…]()
+![telegram-cloud-photo-size-2-5418380851026191361-y](https://github.com/TimofeyZubashev/transformer_for_text_summarization/assets/120308225/f4dcacac-d0d2-4f49-b7a7-6dfbf0fc8cfd)
 
 # Vanila Transformer Architecture for text summarization
 
