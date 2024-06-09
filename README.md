@@ -1,3 +1,5 @@
+![Uploading image.png…]()
+
 # Vanila Transformer Architecture for text summarization
 
 In this folder I have realised transformer summarizer using vanila transformer achitecture.
