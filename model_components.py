@@ -5,38 +5,10 @@ import numpy as np
 from tqdm import tqdm
 import pickle
 
-# Working with text
-
-import re
-
-# Transformers
-
-import transformers
-from transformers import AutoTokenizer, AutoModel
-from transformers import GPT2Tokenizer
-
 # Model creation 
 import torch
 from torch import nn
 import torch.nn.functional as F
-
-# Dataset & Dataloader
-
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader
-
-# Optimizer 
-from torch.optim import Adam
-
-# Schedular
-from torch.optim.lr_scheduler import ReduceLROnPlateau
-
-# TQDM
-from tqdm import tqdm
-
-# Visualization
-import matplotlib.pyplot as plt
-from IPython.display import clear_output
 
 device = ("cuda:0" if torch.cuda.is_available() else "cpu")
 

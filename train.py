@@ -1,25 +1,6 @@
 # Imports
 
 import pandas as pd
-import numpy as np
-from tqdm import tqdm
-import pickle
-
-# Working with text
-
-import re
-
-# Transformers
-from transformers import AutoTokenizer, AutoModel
-
-# Model creation 
-import torch
-from torch import nn
-import torch.nn.functional as F
-
-# Dataset & Dataloader
-
-from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
 # Optimizer 
@@ -27,12 +8,6 @@ from torch.optim import Adam
 
 # Schedular
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-
-# TQDM
-from tqdm import tqdm
-
-# Visualization
-import matplotlib.pyplot as plt
 from IPython.display import clear_output
 
 # Importing model
@@ -44,11 +19,6 @@ print()
 print("="*100)
 print("STARTING TRAINING")
 print("="*100)
-
-# Create tokenizer
-tokenizer = AutoTokenizer.from_pretrained('prajjwal1/bert-tiny')
-print(f"Tokeizer vocab size = {tokenizer.vocab_size} tokens")
-
 
 # Read data
 train_df = pd.read_csv("datasets/train_data_short.csv")

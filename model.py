@@ -5,8 +5,8 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-from model_components import Attention,Decoder,Encoder,Input_Encoder
-from transformers import AutoTokenizer
+from model_components import Decoder,Encoder
+from config import model_params, input_encoder_obj, device
 
 class TTransformer(nn.Module):
         def __init__(self,attention_head_class,output_dim: int,hidden_dim: int,n_blocks: int,
@@ -62,7 +62,7 @@ class TTransformer(nn.Module):
                 y_mask = (generated != self.pad_idx)
                 y_mask = y_mask & self.subsequent_mask(generated.size(-1)).type_as(y_mask.data)
 
-                decoder_output = self.Decoder(generated, encoder_output, x_attention_mask, y_mask)
+                decoder_output = self.Decoder(generated, encoder_output, x_attention_mask)
 
                 next_token_logits = decoder_output[:, -1, :]
                 next_token = torch.argmax(next_token_logits, dim=-1, keepdim=True)
@@ -77,22 +77,6 @@ class TTransformer(nn.Module):
             subsequent_mask = torch.triu(torch.ones(attn_shape), diagonal=1).type(torch.uint8)
             return subsequent_mask == 0
 
-# Create tokenizer
-tokenizer = AutoTokenizer.from_pretrained('prajjwal1/bert-tiny')
-print(f"Tokeizer vocab size = {tokenizer.vocab_size} tokens")
 
-# Params
-vocab_size = tokenizer.vocab_size
-hidden_dim = 256
-n_blocks = 6
-n_heads = 8
-pad_idx = 0
-max_length = 1500
-max_seq_length = 250
-device = ("cuda" if torch.cuda.is_available() else "cpu")
-
-# Create input_encoder_obj  to store nn.Embedding table, which is used to convert tokens to vectors
-input_encoder_obj = Input_Encoder(vocab_size,hidden_dim,pad_idx,max_length,max_seq_length)
-
-model = TTransformer(Attention,vocab_size,hidden_dim,n_blocks,n_heads,pad_idx,device,max_length,max_seq_length,input_encoder_obj)
+model = TTransformer(**model_params,device = device,input_encoder_obj = input_encoder_obj)
 model = model.to(device)
